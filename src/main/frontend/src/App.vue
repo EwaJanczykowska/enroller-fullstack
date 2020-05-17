@@ -1,19 +1,25 @@
 <template>
-  <div id="app">
-    <h1>
-      <img src="./assets/logo.svg" alt="Enroller" class="logo">
-      System do zapisów na zajęcia
-    </h1>
-    <div v-if="authenticatedUsername">
-      <h2>Witaj {{ authenticatedUsername }}!
-        <a @click="logout()" class="float-right  button-outline button">Wyloguj</a>
-      </h2>
-      <meetings-page :username="authenticatedUsername"></meetings-page>
-    </div>
-    <div v-else>
-      <login-form @login="login($event)"></login-form>
-    </div>
-  </div>
+	<div id="app">
+		<h1>
+			<img src="./assets/logo.svg" alt="Enroller" class="logo">
+			System do zapisów na zajęcia
+		</h1>
+		<div v-if="authenticatedUsername">
+			<h2>Witaj {{ authenticatedUsername }}!
+				<a @click="logout()" class="float-right  button-outline button">Wyloguj</a>
+			</h2>
+			<meetings-page :username="authenticatedUsername"></meetings-page>
+		</div>
+		<div v-else>
+			<button @click="openLoginForm()"
+					:class="displayRegistrationForm ? 'button-outline' : ''">Loguję się</button>
+			<button @click="openRegistrationForm()"
+					:class="!displayRegistrationForm ? 'button-outline' : ''">Rejestruję się</button>
+			<login-form v-if="!displayRegistrationForm" @login="login($event)"></login-form>
+			<login-form v-else @register="register($event)"
+						button-label="Zarejestruj się"></login-form>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -25,7 +31,8 @@
         components: {LoginForm, MeetingsPage},
         data() {
             return {
-                authenticatedUsername: ""
+                authenticatedUsername: "",
+                displayRegistrationForm: false
             };
         },
         methods: {
@@ -34,19 +41,28 @@
             },
             logout() {
                 this.authenticatedUsername = '';
+            },
+            register(user) {
+
+            },
+            openLoginForm() {
+                this.displayRegistrationForm = false;
+            },
+            openRegistrationForm() {
+                this.displayRegistrationForm = true;
             }
         }
     };
 </script>
 
 <style>
-  #app {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
+	#app {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
 
-  .logo {
-    vertical-align: middle;
-  }
+	.logo {
+		vertical-align: middle;
+	}
 </style>
 
