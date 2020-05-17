@@ -15,6 +15,9 @@
 					:class="displayRegistrationForm ? 'button-outline' : ''">Loguję się</button>
 			<button @click="openRegistrationForm()"
 					:class="!displayRegistrationForm ? 'button-outline' : ''">Rejestruję się</button>
+
+			<div v-if="error" class="error-alert">{{error}}</div>
+
 			<login-form v-if="!displayRegistrationForm" @login="login($event)"></login-form>
 			<login-form v-else @login="register($event)"
 						button-label="Zarejestruj się"></login-form>
@@ -32,7 +35,8 @@
         data() {
             return {
                 authenticatedUsername: "",
-                displayRegistrationForm: false
+                displayRegistrationForm: false,
+				error: ""
             };
         },
         methods: {
@@ -43,7 +47,14 @@
                 this.authenticatedUsername = '';
             },
             register(user) {
-
+                this.error = '';
+                this.$http.post('participants', user)
+                    .then(response => {
+                        // udało się
+                    })
+                    .catch(response => {
+                        this.error = "Taki użytkownik już istnieje!"
+                    });
             },
             openLoginForm() {
                 this.displayRegistrationForm = false;
@@ -63,6 +74,13 @@
 
 	.logo {
 		vertical-align: middle;
+	}
+
+	.error-alert {
+		border: 2px solid red;
+		background: pink;
+		padding: 10px;
+		text-align: center;
 	}
 </style>
 
