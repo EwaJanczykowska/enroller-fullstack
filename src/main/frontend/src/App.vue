@@ -16,7 +16,7 @@
 			<button @click="openRegistrationForm()"
 					:class="!displayRegistrationForm ? 'button-outline' : ''">Rejestruję się</button>
 			<login-form v-if="!displayRegistrationForm" @login="login($event)"></login-form>
-			<login-form v-else @register="register($event)"
+			<login-form v-else @login="register($event)"
 						button-label="Zarejestruj się"></login-form>
 		</div>
 	</div>
