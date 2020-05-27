@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "meeting")
@@ -26,6 +27,7 @@ public class Meeting {
     private long id;
 
     @Column
+    @JsonProperty("name")
     private String title;
 
     @Column

@@ -29,9 +29,14 @@
                 meetings: []
             };
         },
+
         methods: {
             addNewMeeting(meeting) {
-                this.meetings.push(meeting);
+                this.$http.post('meetings', meeting)
+                    .then(response => {
+                        this.meetings.push(response.body);
+                    })
+                    .catch(response => alert('Błąd przy dodawaniu spotkania. Kod odpowiedzi: ' + response.status));
             },
             addMeetingParticipant(meeting) {
                 meeting.participants.push(this.username);
@@ -40,8 +45,20 @@
                 meeting.participants.splice(meeting.participants.indexOf(this.username), 1);
             },
             deleteMeeting(meeting) {
-                this.meetings.splice(this.meetings.indexOf(meeting), 1);
+                this.$http.delete('meetings/' + meeting.id)
+                    .then(response => {
+                        this.meetings.splice(this.meetings.indexOf(meeting), 1);
+                    })
+                    .catch(response => alert('Błąd przy usuwaniu spotkania. Kod odpowiedzi: ' + response.status));
             }
+        },
+
+        mounted() {
+            this.$http.get('meetings')
+            .then(response => {
+                this.meetings.push(...response.body);
+            })
+            .catch(response => alert('Błąd przy pobieraniu listy spotkań. Kod odpowiedzi: ' + response.status));
         }
     }
 </script>
