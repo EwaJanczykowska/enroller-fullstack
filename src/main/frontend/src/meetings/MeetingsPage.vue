@@ -39,10 +39,17 @@
                     .catch(response => alert('Błąd przy dodawaniu spotkania. Kod odpowiedzi: ' + response.status));
             },
             addMeetingParticipant(meeting) {
-                meeting.participants.push(this.username);
+                let participant = {};
+                participant.login = this.username;
+
+                this.$http.post('meetings/' + meeting.id + '/participants', participant)
+                        .then(response => meeting.participants.push(participant))
+                        .catch(response => alert('Błąd przy zapisywaniu na spotkanie. Kod odpowiedzi: ' + response.status));
             },
             removeMeetingParticipant(meeting) {
-                meeting.participants.splice(meeting.participants.indexOf(this.username), 1);
+                this.$http.delete('meetings/' + meeting.id + '/participants/' + this.username)
+                        .then(response =>meeting.participants.splice(meeting.participants.indexOf(this.username), 1))
+                        .catch(response => alert('Błąd przy usuwaniu ze spotkania. Kod odpowiedzi: ' + response.status));
             },
             deleteMeeting(meeting) {
                 this.$http.delete('meetings/' + meeting.id)
