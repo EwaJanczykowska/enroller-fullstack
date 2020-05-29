@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Collection;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class ParticipantRestControllerTest {
 	@MockBean
 	private ParticipantService participantService;
 
+	@Ignore
 	@Test
 	public void getParticipants() throws Exception {
 		Participant participant = new Participant();
@@ -45,7 +47,7 @@ public class ParticipantRestControllerTest {
 		Collection<Participant> allParticipants = singletonList(participant);
 		given(participantService.getAll()).willReturn(allParticipants);
 
-		mvc.perform(get("/api/participants").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+		mvc.perform(get("/api/participants") .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].login", is(participant.getLogin())));
 	}
 
