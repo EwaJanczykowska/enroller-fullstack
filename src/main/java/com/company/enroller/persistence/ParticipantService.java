@@ -11,10 +11,10 @@ import java.util.Collection;
 @Component("participantService")
 public class ParticipantService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    DatabaseConnector connector;
 
-    private DatabaseConnector connector;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public ParticipantService() {
         connector = DatabaseConnector.getInstance();
@@ -29,8 +29,8 @@ public class ParticipantService {
     }
 
     public Participant add(Participant participant) {
-        String encodedPassword = passwordEncoder.encode(participant.getPassword());
-        participant.setPassword(encodedPassword);
+        String hashedPassword = passwordEncoder.encode(participant.getPassword());
+        participant.setPassword(hashedPassword);
         Transaction transaction = connector.getSession().beginTransaction();
         connector.getSession().save(participant);
         transaction.commit();
@@ -38,8 +38,6 @@ public class ParticipantService {
     }
 
     public void update(Participant participant) {
-        String encodedPassword = passwordEncoder.encode(participant.getPassword());
-        participant.setPassword(encodedPassword);
         Transaction transaction = connector.getSession().beginTransaction();
         connector.getSession().merge(participant);
         transaction.commit();
